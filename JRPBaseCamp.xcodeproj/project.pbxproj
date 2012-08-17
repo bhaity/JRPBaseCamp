@@ -1,0 +1,263 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		72698AE715DEEAF60003E66E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72698AE615DEEAF60003E66E /* UIKit.framework */; };
+		72698AE915DEEAF60003E66E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72698AE815DEEAF60003E66E /* Foundation.framework */; };
+		72698AEB15DEEAF60003E66E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72698AEA15DEEAF60003E66E /* CoreGraphics.framework */; };
+		72698AF115DEEAF60003E66E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 72698AEF15DEEAF60003E66E /* InfoPlist.strings */; };
+		72698AF315DEEAF60003E66E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 72698AF215DEEAF60003E66E /* main.m */; };
+		72698AF715DEEAF60003E66E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 72698AF615DEEAF60003E66E /* AppDelegate.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		72698AE215DEEAF60003E66E /* JRPBaseCamp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JRPBaseCamp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		72698AE615DEEAF60003E66E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		72698AE815DEEAF60003E66E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		72698AEA15DEEAF60003E66E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		72698AEE15DEEAF60003E66E /* JRPBaseCamp-Info.plist */ = {isa = PBXFileReference; path = "JRPBaseCamp-Info.plist"; sourceTree = "<group>"; };
+		72698AF015DEEAF60003E66E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		72698AF215DEEAF60003E66E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		72698AF415DEEAF60003E66E /* JRPBaseCamp-Prefix.pch */ = {isa = PBXFileReference; path = "JRPBaseCamp-Prefix.pch"; sourceTree = "<group>"; };
+		72698AF515DEEAF60003E66E /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		72698AF615DEEAF60003E66E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		72698ADF15DEEAF60003E66E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72698AE715DEEAF60003E66E /* UIKit.framework in Frameworks */,
+				72698AE915DEEAF60003E66E /* Foundation.framework in Frameworks */,
+				72698AEB15DEEAF60003E66E /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		72698AD715DEEAF60003E66E = {
+			isa = PBXGroup;
+			children = (
+				72698AEC15DEEAF60003E66E /* JRPBaseCamp */,
+				72698AE515DEEAF60003E66E /* Frameworks */,
+				72698AE315DEEAF60003E66E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		72698AE315DEEAF60003E66E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				72698AE215DEEAF60003E66E /* JRPBaseCamp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		72698AE515DEEAF60003E66E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				72698AE615DEEAF60003E66E /* UIKit.framework */,
+				72698AE815DEEAF60003E66E /* Foundation.framework */,
+				72698AEA15DEEAF60003E66E /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		72698AEC15DEEAF60003E66E /* JRPBaseCamp */ = {
+			isa = PBXGroup;
+			children = (
+				72698AF515DEEAF60003E66E /* AppDelegate.h */,
+				72698AF615DEEAF60003E66E /* AppDelegate.m */,
+				72698AED15DEEAF60003E66E /* Supporting Files */,
+			);
+			path = JRPBaseCamp;
+			sourceTree = "<group>";
+		};
+		72698AED15DEEAF60003E66E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				72698AEE15DEEAF60003E66E /* JRPBaseCamp-Info.plist */,
+				72698AEF15DEEAF60003E66E /* InfoPlist.strings */,
+				72698AF215DEEAF60003E66E /* main.m */,
+				72698AF415DEEAF60003E66E /* JRPBaseCamp-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		72698AE115DEEAF60003E66E /* JRPBaseCamp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72698AFA15DEEAF60003E66E /* Build configuration list for PBXNativeTarget "JRPBaseCamp" */;
+			buildPhases = (
+				72698ADE15DEEAF60003E66E /* Sources */,
+				72698ADF15DEEAF60003E66E /* Frameworks */,
+				72698AE015DEEAF60003E66E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JRPBaseCamp;
+			productName = JRPBaseCamp;
+			productReference = 72698AE215DEEAF60003E66E /* JRPBaseCamp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		72698AD915DEEAF60003E66E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 72698ADC15DEEAF60003E66E /* Build configuration list for PBXProject "JRPBaseCamp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 72698AD715DEEAF60003E66E;
+			productRefGroup = 72698AE315DEEAF60003E66E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				72698AE115DEEAF60003E66E /* JRPBaseCamp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		72698AE015DEEAF60003E66E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72698AF115DEEAF60003E66E /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		72698ADE15DEEAF60003E66E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72698AF315DEEAF60003E66E /* main.m in Sources */,
+				72698AF715DEEAF60003E66E /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		72698AEF15DEEAF60003E66E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				72698AF015DEEAF60003E66E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		72698AF815DEEAF60003E66E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		72698AF915DEEAF60003E66E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		72698AFB15DEEAF60003E66E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JRPBaseCamp/JRPBaseCamp-Prefix.pch";
+				INFOPLIST_FILE = "JRPBaseCamp/JRPBaseCamp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		72698AFC15DEEAF60003E66E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JRPBaseCamp/JRPBaseCamp-Prefix.pch";
+				INFOPLIST_FILE = "JRPBaseCamp/JRPBaseCamp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		72698ADC15DEEAF60003E66E /* Build configuration list for PBXProject "JRPBaseCamp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72698AF815DEEAF60003E66E /* Debug */,
+				72698AF915DEEAF60003E66E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		72698AFA15DEEAF60003E66E /* Build configuration list for PBXNativeTarget "JRPBaseCamp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72698AFB15DEEAF60003E66E /* Debug */,
+				72698AFC15DEEAF60003E66E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 72698AD915DEEAF60003E66E /* Project object */;
+}
