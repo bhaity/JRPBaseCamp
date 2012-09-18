@@ -23,4 +23,7 @@
 @synthesize attachments;
 @synthesize documents;
 
+@synthesize ID;
+
+
 @end

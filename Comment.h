@@ -14,5 +14,7 @@
 @property (nonatomic, retain) NSString* creator_name;
 @property (nonatomic, retain) NSString* creator_avatar_url;
 @property (nonatomic, retain) NSString* created_at;
+@property int ID;
+
 
 @end

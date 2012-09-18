@@ -29,6 +29,8 @@
     return self;
 }
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -75,14 +77,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     globals *global = [globals sharedInstance];
   //  [[global.projects objectAtIndex:global.selectedRow]topics_url];
@@ -106,7 +106,7 @@
     
     cell.textLabel.text =  [listData objectAtIndex:row];
     
-    NSString* detail = [listData2 objectAtIndex:row];
+    //NSString* detail = [listData2 objectAtIndex:row];
    
 //   if([detail isKindOfClass:[NSNull class]])
 //   {
@@ -175,6 +175,8 @@
     return YES;
 }
 */
+
+
 
 #pragma mark - Table view delegate
 

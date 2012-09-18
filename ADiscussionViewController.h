@@ -14,5 +14,9 @@
 @property (nonatomic, retain)NSMutableArray * listData2;
 @property (nonatomic, retain)NSMutableArray * listData3;
 
+-(NSString *)flattenHTML:(NSString *)html;
+
+
+
 
 @end

@@ -30,6 +30,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [webView setDelegate:self];
+    
     globals *global = [globals sharedInstance];
     Attachment * a = global.selectedAttachment;
     
@@ -45,11 +47,42 @@
    // NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
     
     [webView loadRequest:request];
-    
+    webView.multipleTouchEnabled = YES;
+    webView.scalesPageToFit = YES;
     [self.view addSubview:webView];
     
     // Do any additional setup after loading the view from its nib.
 }
+
+//- (void)webViewDidStartLoad:(UIWebView *)webView {
+//    [[UIApplication sharedApplication]
+//     setNetworkActivityIndicatorVisible:YES];
+//}
+//
+//- (void)webViewDidFinishLoad:(UIWebView *)webView {
+//    [[UIApplication sharedApplication]
+//     setNetworkActivityIndicatorVisible:NO];
+//}
+//
+//- (void)webView:(UIWebView *)webView didFailLoadWithError:
+//(NSError *)error {
+//    [[UIApplication sharedApplication]
+//     setNetworkActivityIndicatorVisible:NO];
+//}
+
+-(void)webViewDidStartLoad:(UIWebView *) webView {
+    UIActivityIndicatorView *actInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    UIBarButtonItem *actItem = [[UIBarButtonItem alloc] initWithCustomView:actInd];
+    
+    self.navigationItem.rightBarButtonItem = actItem;
+    
+    [actInd startAnimating];
+
+}
+-(void)webViewDidFinishLoad:(UIWebView *) webView{
+    self.navigationItem.rightBarButtonItem = nil;
+}
+
 
 - (void)viewDidUnload
 {

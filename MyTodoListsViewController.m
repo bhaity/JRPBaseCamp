@@ -19,6 +19,7 @@
 
 @synthesize listData;
 @synthesize listData2;
+@synthesize tableView;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -32,17 +33,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    globals *global = [globals sharedInstance];
-    self.listData =  [[NSMutableArray alloc]init];
-    self.listData2 =  [[NSMutableArray alloc]init];
+//    self.listData =  [[NSMutableArray alloc]init];
+//    self.listData2 =  [[NSMutableArray alloc]init];
     self.navigationItem.title = @"My To-do Lists";
-    
-    for(int i =0;i<[global.myTodoLists count];i++){
-        ToDoList *tdl = [global .myTodoLists objectAtIndex:i];
-        [listData addObject:tdl.name];
-        [listData2 addObject:[NSString stringWithFormat:@"%i to-dos", tdl.remaining]];
-        
-    }
+//    
+//    for(int i =0;i<[global.myTodoLists count];i++){
+//        ToDoList *tdl = [global .myTodoLists objectAtIndex:i];
+//        [listData addObject:tdl.name];
+//        [listData2 addObject:[NSString stringWithFormat:@"%i to-dos", tdl.remaining]];
+//        
+//    }
     
     
     
@@ -64,6 +64,7 @@
 
 - (void)viewDidUnload
 {
+    [self setTableView:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -78,19 +79,21 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     globals *global = [globals sharedInstance];
 
     return [global.myTodoLists count];
 }
+-(void)viewDidAppear:(BOOL)animated{
+    [self.tableView reloadData];
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -98,17 +101,34 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SimpleTableIdentifier];
     if (cell==nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:SimpleTableIdentifier];
+        cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+        cell.textLabel.numberOfLines = 0;
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
         
     }
-    NSUInteger row = [indexPath row];
-    // globals *global = [globals sharedInstance];
     
-    cell.textLabel.text = [listData objectAtIndex:row];
-    cell.detailTextLabel.text = [listData2 objectAtIndex:row];
+    NSUInteger row = [indexPath row];
+     globals *global = [globals sharedInstance];
+    
+    cell.textLabel.text = [[global.myTodoLists objectAtIndex:row]name];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%i to-dos", [[global.myTodoLists objectAtIndex:row]remaining]];
+    cell.detailTextLabel.font = [UIFont italicSystemFontOfSize:10];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    globals *global = [globals sharedInstance];
+    
+    NSString *cellText = [[global.myTodoLists objectAtIndex:indexPath.row]name];
+    UIFont *cellFont = [UIFont systemFontOfSize:14];
+    CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
+    CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+    
+    return labelSize.height + 25;
+}
+
 
 /*
 // Override to support conditional editing of the table view.

@@ -13,4 +13,6 @@
 @synthesize created_at;
 @synthesize creator_name;
 @synthesize creator_avatar_url;
+@synthesize ID;
+
 @end

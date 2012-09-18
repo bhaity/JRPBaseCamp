@@ -22,7 +22,12 @@
 #import "globals.h"
 #import "ProfileViewController.h"
 #import "Person.h"
-#import "AsyncImageView.h"
+//#import "AsyncImageView.h"
+#import "UIImageView+AFNetworking.h"
+#import <QuartzCore/QuartzCore.h>
+#import "UIImage+TPAdditions.h"
+
+
 
 
 @interface PeopleViewController ()
@@ -35,6 +40,7 @@
 
 @synthesize projectsArray;
 @synthesize topicCountArray;
+@synthesize tableView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -51,17 +57,19 @@
     
     [super viewDidLoad];
     
-    self.listData2 = [[NSMutableArray alloc]init ];
-    self.listData = [[NSMutableArray alloc]init];
-    
-    globals *global = [globals sharedInstance];
-        
-    for(int i=0;i<[global.people count];i++){
-        Person *pp = [global.people objectAtIndex:i];
-        [listData addObject:pp.name];
-        [listData2 addObject:pp.avatar_url];
-        
-    }
+
+//    
+//    self.listData2 = [[NSMutableArray alloc]init ];
+//    self.listData = [[NSMutableArray alloc]init];
+//    
+//    globals *global = [globals sharedInstance];
+//        
+//    for(int i=0;i<[global.people count];i++){
+//        Person *pp = [global.people objectAtIndex:i];
+//        [listData addObject:pp.name];
+//        [listData2 addObject:pp.avatar_url];
+//        
+//    }
 
     
     //self.projectsArray = [[NSMutableArray alloc] init];
@@ -69,18 +77,23 @@
    // self.listData = global.peopleNameArray;
     self.navigationItem.title = @"People";
     
+    
 }
 
-
-
+-(void)viewDidAppear:(BOOL)animated{
+    [self.tableView reloadData];
+}
 
 
 
 
 - (void)viewDidUnload
 {
+    [self setTableView:nil];
     [super viewDidUnload];
     self.listData = nil;
+    
+    
     
     // Release any retained subviews of the main view.
 }
@@ -88,6 +101,8 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    
+    
 }
 
 
@@ -101,6 +116,11 @@
     return [global.people count];
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+        return 1;
+   }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
@@ -109,50 +129,85 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+
+    globals *global = [globals sharedInstance];
+    
+
     static NSString* SimpleTableIdentifier = @"SimpleTableIdentifier";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SimpleTableIdentifier]; 
     
     if (cell==nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:SimpleTableIdentifier];
-    } else {
-        AsyncImageView* oldImage = (AsyncImageView*)
-        [cell.contentView viewWithTag:999];
-        [oldImage removeFromSuperview];
-        
-        UILabel* oldText = (UILabel*)
-        [cell.contentView viewWithTag:888];
-        [oldText removeFromSuperview];
     }
+//     else {
+//        AsyncImageView* oldImage = (AsyncImageView*)
+//        [cell.contentView viewWithTag:999];
+//        [oldImage removeFromSuperview];
+//        
+//        UILabel* oldText = (UILabel*)
+//        [cell.contentView viewWithTag:888];
+//        [oldText removeFromSuperview];
+//    }
     
-	CGRect frame;
-	frame.size.width=50; frame.size.height=50;
-	frame.origin.x=0; frame.origin.y=0;
-	AsyncImageView* asyncImage = [[AsyncImageView alloc]
-                                   initWithFrame:frame];
-	asyncImage.tag = 999;
-    
-    
-    
-    CGRect textframe;
-	textframe.size.width=200; textframe.size.height=50;
-	textframe.origin.x=60; frame.origin.y=0;
-    UILabel* customtext = [[UILabel alloc]initWithFrame:textframe];
-    customtext.tag = 888;
+    cell.textLabel.text = [[global.people objectAtIndex:indexPath.row]name];
     
     
     
+    NSString* imgURL =  [[global.people objectAtIndex:indexPath.row]avatar_url];
+    UIImageView* imgV = [[UIImageView alloc]init];
+    [imgV setImageWithURL:[NSURL URLWithString:imgURL] placeholderImage:[UIImage imageNamed:@"icon.png"]];
     
-    globals *global = [globals sharedInstance];
-    Person *p= [global.people objectAtIndex:indexPath.row];
+    cell.imageView.image = [imgV.image imageScaledToSize:CGSizeMake(43,43)];
+    cell.imageView.layer.masksToBounds = YES;
+    cell.imageView.layer.cornerRadius = 5.0;
 
-	NSURL* url = [NSURL URLWithString:p.avatar_url];//[imageDownload thumbnailURLAtIndex:indexPath.row];
-	[asyncImage loadImageFromURL:url];
     
-    customtext.text = p.name;
-    [customtext setFont:[UIFont boldSystemFontOfSize:18]];
+   // [cell.imageView setImageWithURL:[NSURL URLWithString:imgURL] placeholderImage:[UIImage imageNamed:@"icon.png"]];
+    // THIS SNIPPET MAKES THE IMAGES LOAD WELL, BUT SMALL ON RETINA DISPLAY
     
-	[cell.contentView addSubview:asyncImage];
-    [cell.contentView addSubview:customtext];
+    
+    
+       //cell.imageView.frame = CGRectMake(0, 0, 80, 80);
+    
+    
+    //   
+//    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2){
+//        //iPhone 4
+//    }
+//    
+//      cell.imageView.contentScaleFactor = [UIScreen mainScreen].scale;
+//    
+    //    
+    
+//	CGRect frame;
+//	frame.size.width=50; frame.size.height=50;
+//	frame.origin.x=0; frame.origin.y=0;
+//	AsyncImageView* asyncImage = [[AsyncImageView alloc]
+//                                   initWithFrame:frame];
+//	asyncImage.tag = 999;
+//    
+//    
+//    
+//    CGRect textframe;
+//	textframe.size.width=200; textframe.size.height=50;
+//	textframe.origin.x=60; frame.origin.y=0;
+//    UILabel* customtext = [[UILabel alloc]initWithFrame:textframe];
+//    customtext.tag = 888;
+//    
+//    
+//    
+//    
+//    globals *global = [globals sharedInstance];
+//    Person *p= [global.people objectAtIndex:indexPath.row];
+//
+//	NSURL* url = [NSURL URLWithString:p.avatar_url];//[imageDownload thumbnailURLAtIndex:indexPath.row];
+//	[asyncImage loadImageFromURL:url];
+//    
+//    customtext.text = p.name;
+//    [customtext setFont:[UIFont boldSystemFontOfSize:18]];
+//    
+//	[cell.contentView addSubview:asyncImage];
+//    [cell.contentView addSubview:customtext];
     
     
     

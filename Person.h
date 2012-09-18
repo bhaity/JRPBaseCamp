@@ -12,11 +12,15 @@
     NSString* name;
     NSString* email;
     NSString* avatar_url;
+    int ID;
+    
 }
 
 @property (nonatomic, retain)NSString* name;
 @property (nonatomic, retain)NSString* email;
 @property (nonatomic, retain)NSString* avatar_url;
+@property int ID;
+
 
 
 @end

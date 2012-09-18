@@ -14,4 +14,6 @@
 @synthesize isCompleted;
 @synthesize due_at;
 @synthesize parentToDoList;
+@synthesize ID;
+
 @end

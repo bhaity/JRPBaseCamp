@@ -19,11 +19,15 @@
 #import "ToDo.h"
 #import "Attachment.h"
 #import "Document.h"
+#import "AFNetworking.h"
  
 @interface HomeViewController ()
 @end
 
 @implementation HomeViewController
+@synthesize loginButton;
+@synthesize logoutButton;
+@synthesize testButton;
 @synthesize UserField;
 @synthesize PasswordField;
 
@@ -44,9 +48,50 @@ NSString* password;
     HUD.labelText = @"Loading";
     // Show the HUD while the provided method executes in a new thread [HUD showWhileExecuting:@selector(myTask) onTarget:self withObject:nil animated:YES];
 }
+- (IBAction)logoutButtonPressed:(id)sender{
+     globals *global = [globals sharedInstance];
+    global.people = nil;
+    global.projects = nil;
+    global.myTodoLists = nil;
+    global.authValue = nil;
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Logout Successful"
+                                                    message:@"Log back in to access your projects." 
+                                                   delegate:self 
+                                          cancelButtonTitle:@"OK" 
+                                          otherButtonTitles:nil, nil];
+    alert.alertViewStyle = UIAlertViewStyleDefault;
+    [alert show];
+    
+    
+    [[[[[self tabBarController] tabBar] items] 
+      objectAtIndex:3] setBadgeValue:nil];
+    
+    [[[[[self tabBarController] tabBar] items] 
+      objectAtIndex:1] setEnabled:NO];
+    
+    [[[[[self tabBarController] tabBar] items] 
+      objectAtIndex:2] setEnabled:NO];
+    
+    [[[[[self tabBarController] tabBar] items] 
+      objectAtIndex:3] setEnabled:NO];
+    
+    loginButton.hidden = NO;
+    logoutButton.hidden = YES;
+    testButton.hidden = YES;
+    
+    
+    
+
+    
+    
+//    global.selectedRow = Nil;
+//    global.selectedPerson = nil;
+//    global.selectedAttachment = nil;
+//    glob
+}
 
 - (IBAction)loginButtonPressed:(id)sender {
-    globals *global = [globals sharedInstance];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login to Basecamp"
                                                     message:@"Enter your details below." 
                                                    delegate:self 
@@ -70,7 +115,7 @@ NSString* password;
         if (buttonIndex == 1)
         {
             HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            HUD.labelText = @"Connecting...";
+            HUD.labelText = @"Fetching project data...";
             //   HUD.mode = MBProgressHUDMo;
             [self.view addSubview:HUD];
             [HUD show:YES];
@@ -90,10 +135,9 @@ NSString* password;
 - (void) connectBasecamp
 {
     globals *global = [globals sharedInstance];
-    global.avatarArray = [[NSMutableArray alloc]init];
     
     UIAlertView *erroralert = [[UIAlertView alloc] initWithTitle:@"Whoops!" 
-                                                    message:@" There was a problem logging in. Check your username and password and try again."
+                                                    message:@" There was a problem logging in. Check your credentials and network connection and then try again."
                                                    delegate:self 
                                           cancelButtonTitle:@"OK" 
                                
@@ -116,6 +160,7 @@ NSString* password;
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:URL]];
     [request setValue:authValue forHTTPHeaderField:@"Authorization"];
     [request setValue:@"bhaity@gmail.com" forHTTPHeaderField:@"Contact"];
+    [request setTimeoutInterval:300];
     
     // Perform request and get JSON back as a NSData object
     NSError *error = nil;
@@ -137,6 +182,7 @@ NSString* password;
     NSString* peopleURL = @"https://basecamp.com/1931784/api/v1/people.json";
     NSMutableURLRequest *peopleRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:peopleURL]];
     [peopleRequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+        [peopleRequest setTimeoutInterval:300];
     NSData *peopleResponse = [NSURLConnection sendSynchronousRequest:peopleRequest returningResponse:nil error:nil];
     NSString *json_people = [[NSString alloc] initWithData:peopleResponse encoding:NSUTF8StringEncoding];
     
@@ -152,12 +198,14 @@ NSString* password;
         NSString* meURL = @"https://basecamp.com/1931784/api/v1/people/me.json";
         NSMutableURLRequest *meRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:meURL]];
         [meRequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+        [meRequest setTimeoutInterval:300];
         NSData *meResponse = [NSURLConnection sendSynchronousRequest:meRequest returningResponse:nil error:nil];
         NSString *json_me = [[NSString alloc] initWithData:meResponse encoding:NSUTF8StringEncoding];
         
         NSString*mytodosURL = [[[json_me JSONValue] objectForKey:@"assigned_todos"]objectForKey:@"url"];
         NSMutableURLRequest *mytodosRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:mytodosURL]];
         [mytodosRequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+        [mytodosRequest setTimeoutInterval:300];
         NSData *mytodosResponse = [NSURLConnection sendSynchronousRequest:mytodosRequest returningResponse:nil error:nil];
         NSString *json_mytodos = [[NSString alloc] initWithData:mytodosResponse encoding:NSUTF8StringEncoding];
         
@@ -194,6 +242,7 @@ NSString* password;
             NSString* projectURL = [[[json_projects JSONValue] objectAtIndex:i] objectForKey:@"url"];
             NSMutableURLRequest *projectDetailsRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:projectURL]];
             [projectDetailsRequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+            [projectDetailsRequest setTimeoutInterval:300];
             NSData *projectDetailsResponse = [NSURLConnection sendSynchronousRequest:projectDetailsRequest returningResponse:nil error:nil];
             NSString *json_projectDetails = [[NSString alloc] initWithData:projectDetailsResponse encoding:NSUTF8StringEncoding];
         
@@ -212,8 +261,12 @@ NSString* password;
             p.topics_url = [[[json_projectDetails JSONValue] objectForKey:@"topics"]objectForKey:@"url"];
             p.todolists_url = [[[json_projectDetails JSONValue] objectForKey:@"todolists"]objectForKey:@"url"];
             
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+            dispatch_async(queue, ^{
+                
             NSMutableURLRequest *topicsrequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:p.topics_url]];
             [topicsrequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+            [topicsrequest setTimeoutInterval:300];
             NSData *topicsresponse = [NSURLConnection sendSynchronousRequest:topicsrequest returningResponse:nil error:nil];
             NSString* json_topics = [[NSString alloc] initWithData:topicsresponse encoding:NSUTF8StringEncoding];  
             
@@ -227,6 +280,7 @@ NSString* password;
                 
                 NSMutableURLRequest *commentsrequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:d.url]];
                 [commentsrequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+                [commentsrequest setTimeoutInterval:300];
                 NSData *commentsresponse = [NSURLConnection sendSynchronousRequest:commentsrequest returningResponse:nil error:nil];
                 NSString* json_comments = [[NSString alloc] initWithData:commentsresponse encoding:NSUTF8StringEncoding]; 
                 
@@ -235,16 +289,20 @@ NSString* password;
                            c.content = [[[[json_comments JSONValue] objectForKey:@"comments"]objectAtIndex:i] objectForKey:@"content"];
                            c.creator_name = [[[[[json_comments JSONValue] objectForKey:@"comments"] objectAtIndex:i] objectForKey:@"creator"] objectForKey:@"name"];
                            c.creator_avatar_url = [[[[[json_comments JSONValue] objectForKey:@"comments"] objectAtIndex:i] objectForKey:@"creator"] objectForKey:@"avatar_url"];
-                           c.created_at = [[[[json_comments JSONValue] objectForKey:@"comments"]objectAtIndex:i] objectForKey:@"created_at"];
+                           c.created_at = [[[[[json_comments JSONValue] objectForKey:@"comments"]objectAtIndex:i] objectForKey:@"created_at"]substringToIndex:10];
                            
                            [d.comments addObject:c]; 
                    }
                 [p.discussions addObject:d];
             }
+});            
             
-            
+dispatch_queue_t queue2 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+dispatch_async(queue2, ^{
+    
             NSMutableURLRequest *todolistsrequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:p.todolists_url]];
             [todolistsrequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+            [todolistsrequest setTimeoutInterval:300];
             NSData *todolistsresponse = [NSURLConnection sendSynchronousRequest:todolistsrequest returningResponse:nil error:nil];
             NSString* json_todolists = [[NSString alloc] initWithData:todolistsresponse encoding:NSUTF8StringEncoding];
               
@@ -260,6 +318,7 @@ NSString* password;
                                 
                 NSMutableURLRequest *todosrequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:t.url]];
                 [todosrequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+                [todosrequest setTimeoutInterval:300];
                 NSData *todosresponse = [NSURLConnection sendSynchronousRequest:todosrequest returningResponse:nil error:nil];
                 NSString* json_todos = [[NSString alloc] initWithData:todosresponse encoding:NSUTF8StringEncoding]; 
                 
@@ -273,8 +332,15 @@ NSString* password;
                 [p.todolists addObject:t];
             }
             
+});
+            
+            
+dispatch_queue_t queue3 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+            dispatch_async(queue3, ^{ 
+                
             NSMutableURLRequest *accessesrequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:p.accesses_url]];
             [accessesrequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+            [accessesrequest setTimeoutInterval:300];
             NSData *accessesresponse = [NSURLConnection sendSynchronousRequest:accessesrequest returningResponse:nil error:nil];
             NSString* json_accesses = [[NSString alloc] initWithData:accessesresponse encoding:NSUTF8StringEncoding];
             
@@ -286,9 +352,15 @@ NSString* password;
                 [p.accesses addObject:pp];
             }
                 
+});
             
+            
+dispatch_queue_t queue4 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+            dispatch_async(queue4, ^{
+                
             NSMutableURLRequest *attachmentsrequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:p.attachments_url]];
             [attachmentsrequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+            [attachmentsrequest setTimeoutInterval:300];
             NSData *attachmentsresponse = [NSURLConnection sendSynchronousRequest:attachmentsrequest returningResponse:nil error:nil];
             NSString* json_attachments = [[NSString alloc] initWithData:attachmentsresponse encoding:NSUTF8StringEncoding];
             
@@ -298,9 +370,18 @@ NSString* password;
                 a.url = [[[json_attachments JSONValue] objectAtIndex:i]objectForKey:@"url"];
                 [p.attachments addObject:a];
             }
+                
+                
+ });
             
+            
+            
+dispatch_queue_t queue5 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+dispatch_async(queue5, ^{ 
+    
             NSMutableURLRequest *documentsrequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:p.documents_url]];
-            [documentsrequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+                [documentsrequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+            [documentsrequest setTimeoutInterval:300];
             NSData *documentsresponse = [NSURLConnection sendSynchronousRequest:documentsrequest returningResponse:nil error:nil];
             NSString* json_documents = [[NSString alloc] initWithData:documentsresponse encoding:NSUTF8StringEncoding];
             
@@ -312,15 +393,18 @@ NSString* password;
                 
                 NSMutableURLRequest *documentrequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:d.url]];
                 [documentrequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+                [documentrequest setTimeoutInterval:300];
                 NSData *documentresponse = [NSURLConnection sendSynchronousRequest:documentrequest returningResponse:nil error:nil];
                 NSString* json_document = [[NSString alloc] initWithData:documentresponse encoding:NSUTF8StringEncoding];
                 
                 d.content = [[json_document JSONValue]objectForKey:@"content"];
                 [p.documents addObject:d];
+            
                     
             }
             
             NSLog(@"%@", json_documents);
+});
         
             [global.projects addObject:p];
         }
@@ -340,6 +424,21 @@ NSString* password;
         
         [[[[[self tabBarController] tabBar] items] 
           objectAtIndex:3] setBadgeValue:[NSString stringWithFormat: @"%d", todocount]];
+        
+        [[[[[self tabBarController] tabBar] items] 
+          objectAtIndex:1] setEnabled:YES];
+        
+        [[[[[self tabBarController] tabBar] items] 
+          objectAtIndex:2] setEnabled:YES];
+        
+        [[[[[self tabBarController] tabBar] items] 
+          objectAtIndex:3] setEnabled:YES];
+        
+        loginButton.hidden = YES;
+        logoutButton.hidden = NO;
+        testButton.hidden = NO;
+        
+        
  //    */   
         
     }
@@ -375,6 +474,18 @@ NSString* password;
 {
     [super viewDidLoad];
     
+    testButton.hidden = YES;
+    
+    [[[[[self tabBarController] tabBar] items] 
+      objectAtIndex:1] setEnabled:NO];
+    
+    [[[[[self tabBarController] tabBar] items] 
+      objectAtIndex:2] setEnabled:NO];
+    
+    [[[[[self tabBarController] tabBar] items] 
+      objectAtIndex:3] setEnabled:NO];
+
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -384,6 +495,9 @@ NSString* password;
     [self setPasswordField:nil];
     //[self setUserSelected:nil];
     
+    [self setLoginButton:nil];
+    [self setLogoutButton:nil];
+    [self setTestButton:nil];
     [super viewDidUnload];
     
     // Release any retained subviews of the main view.
@@ -395,4 +509,43 @@ NSString* password;
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (IBAction)testButtonpressed:(id)sender {
+    globals *global = [globals sharedInstance];
+
+    NSString* testURL = @"https://basecamp.com/1931784/api/v1/projects/954014/todolists/2308424/todos.json";
+    
+    NSMutableURLRequest * testPostRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:testURL]];
+    [testPostRequest setHTTPMethod:@"POST"];
+    [testPostRequest setValue:global.authValue forHTTPHeaderField:@"Authorization"];
+    
+    
+    NSMutableDictionary* testDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"testing todo!",@"content",
+                                     NULL, @"due_at",
+                                     NULL, @"assignee",
+                                     nil];
+    
+    
+    
+    NSData* httpBodyData=[NSJSONSerialization dataWithJSONObject:testDict options:0 error:nil];
+    
+    [testPostRequest setHTTPBody:httpBodyData];
+    [testPostRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+
+    
+    NSError *error = [[NSError alloc]init];
+    NSHTTPURLResponse *urlResponse = nil;
+    
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:testPostRequest returningResponse:&urlResponse error:&error];
+    
+    NSString *result = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+    
+    
+    NSLog(@"Response code: %d", [urlResponse statusCode]);
+    if ([urlResponse statusCode] >=200 && [urlResponse statusCode] <300)
+    {
+        NSLog(@"Response ==> %@", result);
+    
+    }
+    
+}
 @end

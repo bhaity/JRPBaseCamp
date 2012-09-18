@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "NSString_stripHtml.h"
 
 @implementation AppDelegate
 
@@ -22,6 +22,7 @@
     [self.window addSubview:rootController.view];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

@@ -11,4 +11,6 @@
 @implementation Attachment
 @synthesize name;
 @synthesize url;
+@synthesize ID;
+
 @end

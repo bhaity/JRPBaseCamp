@@ -14,5 +14,7 @@
 @property (nonatomic, retain)NSString* due_at;
 @property BOOL isCompleted;
 @property (nonatomic, retain)NSString* parentToDoList;
+@property int ID;
+
 
 @end

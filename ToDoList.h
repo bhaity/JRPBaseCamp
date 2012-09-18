@@ -15,7 +15,7 @@
 @property(nonatomic, retain) NSMutableArray* todos;
 @property BOOL isCompleted;
 @property int remaining;
-
+@property int ID;
 
 
 

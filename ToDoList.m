@@ -14,4 +14,6 @@
 @synthesize isCompleted;
 @synthesize remaining;
 @synthesize todos;
+@synthesize ID;
+
 @end

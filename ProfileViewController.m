@@ -10,6 +10,7 @@
 #import "Person.h"
 #import "globals.h"
 #import <AddressBook/AddressBook.h>
+#import<QuartzCore/QuartzCore.h>
 
 @interface ProfileViewController ()
 
@@ -40,7 +41,7 @@ NSString* personPhoneNumber;
     [super viewDidLoad];
     //UIImageView * imgView = [[UIImageView alloc]init ];
     globals *global = [globals sharedInstance];
-    
+
     Person * p = global.selectedPerson;
     
     self.navigationItem.title = [p name];
@@ -50,6 +51,9 @@ NSString* personPhoneNumber;
     UIImage *tmpImage = [[UIImage alloc] initWithData:data];
     
     imgView.image = tmpImage;
+    
+    imgView.layer.masksToBounds = YES;
+    imgView.layer.cornerRadius = 5.0;
        
     [emailButton setTitle:[NSString stringWithFormat:@"Email %@", p.name] forState:UIControlStateNormal];
     [callButton setTitle:[NSString stringWithFormat:@"Call %@", p.name] forState:UIControlStateNormal];
@@ -97,9 +101,11 @@ NSString* personPhoneNumber;
                                                         delegate:self 
                                                cancelButtonTitle:@"OK" 
                                                otherButtonTitles:nil, nil];
+    
+    
     [emailAlert show];
 
-    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", p.email]]];
     
     
 }
@@ -148,11 +154,11 @@ NSString* personPhoneNumber;
 
 - (IBAction)textButtonPressed:(id)sender {
     [self getPhoneNumber];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", personPhoneNumber]]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:%@", personPhoneNumber]]];
 }
 
 - (IBAction)callButtonPressed:(id)sender {
     [self getPhoneNumber];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:%@", personPhoneNumber]]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", personPhoneNumber]]];
 }
 @end

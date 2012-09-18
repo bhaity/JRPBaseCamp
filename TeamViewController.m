@@ -12,7 +12,11 @@
 #import "Person.h"
 #import "NSData+Additions.h"
 #import "ProfileViewController.h"
-#import "AsyncImageView.h"
+//#import "AsyncImageView.h"
+#import "UIImageView+AFNetworking.h"
+#import <QuartzCore/QuartzCore.h>
+#import "UIImage+TPAdditions.h"
+
 
 @interface TeamViewController ()
 
@@ -49,7 +53,15 @@
         
     }
        self.navigationItem.title = @"Team";
-
+    
+    UIBarButtonItem *emailButton = [[UIBarButtonItem alloc] 
+                                   initWithTitle:@"Email Team"                                            
+                                   style:UIBarButtonItemStyleBordered
+                                   target:self 
+                                    action:@selector(teamEmail)];
+    self.navigationItem.rightBarButtonItem = emailButton;
+   
+    
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -58,6 +70,27 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+
+-(void)teamEmail{
+    
+    NSLog(@"here");
+    //NSString* emailString;
+    NSMutableArray* emails = [[NSMutableArray alloc]init];
+    
+    globals *global = [globals sharedInstance];
+    Project* p = [global.projects objectAtIndex:global.selectedRow];
+    
+    for(int i =0;i<[p.accesses count];i++){
+    Person *pp = [p.accesses objectAtIndex:i];
+    [emails addObject:pp.email];
+    
+    }
+    NSString* string = [emails componentsJoinedByString:@","];
+    NSLog(@"%@",string);
+    
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", string]]];
+}
 
 
 
@@ -84,14 +117,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     globals *global = [globals sharedInstance];
     return [[[global.projects objectAtIndex:global.selectedRow]accesses]count];
@@ -105,45 +136,57 @@
     
     if (cell==nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:SimpleTableIdentifier];
-    } else {
-        AsyncImageView* oldImage = (AsyncImageView*)
-        [cell.contentView viewWithTag:999];
-        [oldImage removeFromSuperview];
-        
-        UILabel* oldText = (UILabel*)
-        [cell.contentView viewWithTag:888];
-        [oldText removeFromSuperview];
-    }
+   } 
+//    else {
+//        AsyncImageView* oldImage = (AsyncImageView*)
+//        [cell.contentView viewWithTag:999];
+//        [oldImage removeFromSuperview];
+//        
+//        UILabel* oldText = (UILabel*)
+//        [cell.contentView viewWithTag:888];
+//        [oldText removeFromSuperview];
+//    }
     
-	CGRect frame;
-	frame.size.width=50; frame.size.height=50;
-	frame.origin.x=0; frame.origin.y=0;
-	AsyncImageView* asyncImage = [[AsyncImageView alloc]
-                                  initWithFrame:frame];
-	asyncImage.tag = 999;
-    
-    
-    
-    CGRect textframe;
-	textframe.size.width=200; textframe.size.height=50;
-	textframe.origin.x=60; frame.origin.y=0;
-    UILabel* customtext = [[UILabel alloc]initWithFrame:textframe];
-    customtext.tag = 888;
+//	CGRect frame;
+//	frame.size.width=50; frame.size.height=50;
+//	frame.origin.x=0; frame.origin.y=0;
+//	AsyncImageView* asyncImage = [[AsyncImageView alloc]
+//                                  initWithFrame:frame];
+//	asyncImage.tag = 999;
+//    
+//    
+//    
+//    CGRect textframe;
+//	textframe.size.width=200; textframe.size.height=50;
+//	textframe.origin.x=60; frame.origin.y=0;
+//    UILabel* customtext = [[UILabel alloc]initWithFrame:textframe];
+//    customtext.tag = 888;
     
     
     
     
    // globals *global = [globals sharedInstance];
    // Person *p= [global.people objectAtIndex:indexPath.row];
+    cell.textLabel.text = [listData objectAtIndex:indexPath.row];
+
+	NSString* imgURL = [listData2 objectAtIndex:indexPath.row];//[imageDownload thumbnailURLAtIndex:indexPath.row];
     
-	NSURL* url = [NSURL URLWithString:[listData2 objectAtIndex:indexPath.row]];//[imageDownload thumbnailURLAtIndex:indexPath.row];
-	[asyncImage loadImageFromURL:url];
+    UIImageView* imgV = [[UIImageView alloc]init];
+    [imgV setImageWithURL:[NSURL URLWithString:imgURL] placeholderImage:[UIImage imageNamed:@"icon.png"]];
+    cell.imageView.image = [imgV.image imageScaledToSize:CGSizeMake(43,43)];
+        
+   // [cell.imageView setImageWithURL:[NSURL URLWithString:imgURL] placeholderImage:[UIImage imageNamed:@"icon.png"]];
     
-    customtext.text = [listData objectAtIndex:indexPath.row];
-    [customtext setFont:[UIFont boldSystemFontOfSize:18]];
-    
-	[cell.contentView addSubview:asyncImage];
-    [cell.contentView addSubview:customtext];
+    cell.imageView.layer.masksToBounds = YES;
+    cell.imageView.layer.cornerRadius = 5.0;
+        
+//	[asyncImage loadImageFromURL:url];
+//    
+//    customtext.text = [listData objectAtIndex:indexPath.row];
+//    [customtext setFont:[UIFont boldSystemFontOfSize:18]];
+//    
+//	[cell.contentView addSubview:asyncImage];
+//    [cell.contentView addSubview:customtext];
     
     
     /*  static NSString* SimpleTableIdentifier = @"SimpleTableIdentifier";

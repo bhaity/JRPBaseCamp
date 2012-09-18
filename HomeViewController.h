@@ -24,9 +24,14 @@
 - (void)hudWasHidden;
 -(IBAction)textFieldDoneEditing:(id)sender;
 
+- (IBAction)logoutButtonPressed:(id)sender;
 
+@property (strong, nonatomic) IBOutlet UIButton *loginButton;
 
+@property (strong, nonatomic) IBOutlet UIButton *logoutButton;
 
+@property (strong, nonatomic) IBOutlet UIButton *testButton;
 
+- (IBAction)testButtonpressed:(id)sender;
 
 @end

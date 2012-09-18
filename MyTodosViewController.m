@@ -68,14 +68,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     globals *global = [globals sharedInstance];
     return [[global.selectedTodoList todos]count];
@@ -100,10 +98,16 @@
     
     if ([[listData2 objectAtIndex:row] isKindOfClass:[NSNull class]])
     {
-        cell.detailTextLabel.text = @"No due date set";
+        cell.detailTextLabel.text = @"";
     }
     else{
-        cell.detailTextLabel.text =[NSString stringWithFormat:@"Due by %@", [listData2 objectAtIndex:row]];
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+        NSDate *date = [formatter dateFromString:[listData2 objectAtIndex:row]];
+        [formatter setDateFormat:@"MM/dd/yy"];
+        NSString* dateString = [formatter stringFromDate:date];
+        cell.detailTextLabel.text =[NSString stringWithFormat:@"Due by %@", dateString];
     }
     
     

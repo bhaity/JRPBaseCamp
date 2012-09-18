@@ -11,11 +11,21 @@
 #import "Project.h"
 #import "Discussion.h"
 #import "Comment.h"
+#import "NSString_stripHtml.h"
+#import "UIImageView+AFNetworking.h"
+#import "AFImageRequestOperation.h"
+#import <QuartzCore/QuartzCore.h>
+#import "UIImage+TPAdditions.h"
 
 
 
-@interface ADiscussionViewController ()
 
+
+
+@interface ADiscussionViewController (){
+
+
+}
 @end
 
 @implementation ADiscussionViewController
@@ -48,10 +58,21 @@
     
     for(int i =0;i<[d.comments count];i++){
         Comment *c = [d.comments objectAtIndex:i];
-        NSString* caption = [NSString stringWithFormat:@"Posted by %@ at %@", c.creator_name, c.created_at];
-        [listData addObject:c.content];
+       
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+        NSDate *date = [formatter dateFromString:c.created_at];
+        [formatter setDateFormat:@"MM/dd/yy"];
+        NSString* dateString = [formatter stringFromDate:date];
+        
+        //NSLog(@"%@", dateString);
+        NSString* caption = [NSString stringWithFormat:@"Posted by %@ on %@", c.creator_name, dateString];
+        
+        
+        [listData addObject:[c.content stripHtml]];
         [listData2 addObject:caption];
         [listData3 addObject:c.creator_avatar_url];
+        
    
         
     }
@@ -83,14 +104,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     globals *global = [globals sharedInstance];
     return [[[[[global.projects objectAtIndex:global.selectedRow]discussions]objectAtIndex:global.selectedDiscussionIndex]comments]count];
@@ -112,22 +131,37 @@
         cell.detailTextLabel.font = [UIFont italicSystemFontOfSize:10];
 
     cell.textLabel.text =  [listData objectAtIndex:row];
+    
+    
+    
     cell.detailTextLabel.text = [listData2 objectAtIndex:row];
     
     
     
     NSString* imgURL =  [listData3 objectAtIndex:row];
-    NSURL *url = [NSURL URLWithString:imgURL];
+   // NSURL *url = [NSURL URLWithString:imgURL];
     
-    dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    //this will start the image loading in bg
-    dispatch_async(concurrentQueue, ^{        
-        NSData *image = [[NSData alloc] initWithContentsOfURL:url];
-        //this will set the image when loading is finished
-        dispatch_async(dispatch_get_main_queue(), ^{
-            cell.imageView.image = [UIImage imageWithData:image];
-        });
-    });
+  //  [cell.imageView setImageWithURL:[NSURL URLWithString:imgURL] placeholderImage:[UIImage imageNamed:@"icon.png"]];
+    UIImageView* imgV = [[UIImageView alloc]init];
+    [imgV setImageWithURL:[NSURL URLWithString:imgURL] placeholderImage:[UIImage imageNamed:@"icon.png"]];
+    cell.imageView.image = [imgV.image imageScaledToSize:CGSizeMake(50,50)];
+    
+    cell.imageView.layer.masksToBounds = YES;
+    cell.imageView.layer.cornerRadius = 5.0;
+   // AFImageRequestOperation *imgRequest = 
+    
+//    dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+//    //this will start the image loading in bg
+//    dispatch_async(concurrentQueue, ^{        
+//        NSData *image = [[NSData alloc] initWithContentsOfURL:url];
+//        //this will set the image when loading is finished
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            cell.imageView.image = [UIImage imageWithData:image];
+//        });
+//    });
+    
+    
+    
 
     
     return cell;
@@ -141,8 +175,43 @@
     CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
     CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
     
-    return labelSize.height + 25;
+   // CGSize imageSize = [cell
+    
+    return labelSize.height + 60;
 }
+
+
+
+
+
+- (NSString *)flattenHTML:(NSString *)html {
+    
+    NSScanner *thescanner;
+    NSString *text = nil;
+    
+    thescanner = [NSScanner scannerWithString:html];
+    
+    while ([thescanner isAtEnd] == NO) {
+        
+        // find start of tag
+        [thescanner scanUpToString:@"<" intoString:NULL] ; 
+        
+        // find end of tag
+        [thescanner scanUpToString:@">" intoString:&text] ;
+        
+        // replace the found tag with a space
+        //(you can filter multi-spaces out later if you wish)
+        html = [html stringByReplacingOccurrencesOfString:
+                [NSString stringWithFormat:@"%@>", text]
+                                               withString:@" "];
+        
+    } // while //
+    
+    return html;
+    
+}
+
+
 
 /*
 // Override to support conditional editing of the table view.

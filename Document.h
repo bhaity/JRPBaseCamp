@@ -12,5 +12,7 @@
 @property (nonatomic, retain)NSString* name;
 @property (nonatomic, retain)NSString* content;
 @property (nonatomic, retain)NSString* url;
+@property int ID;
+
 
 @end

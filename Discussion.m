@@ -14,6 +14,7 @@
 @synthesize excerpt;
 @synthesize url;
 @synthesize comments;
+@synthesize ID;
 
 
 @end

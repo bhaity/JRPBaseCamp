@@ -14,6 +14,8 @@
 @synthesize name;
 @synthesize email;
 @synthesize avatar_url;
+@synthesize ID;
+
 
 
 @end

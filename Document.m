@@ -12,4 +12,8 @@
 @synthesize name;
 @synthesize url;
 @synthesize content;
+@synthesize ID;
+
+
+
 @end

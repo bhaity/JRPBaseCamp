@@ -13,5 +13,7 @@
 @property (strong, nonatomic) NSArray *listData;
 @property(nonatomic,retain) NSMutableArray *projectsArray; 
 @property(nonatomic,retain) NSMutableArray *topicCountArray;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @end
+

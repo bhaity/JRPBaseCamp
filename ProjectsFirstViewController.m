@@ -18,6 +18,7 @@
 @synthesize listData;
 @synthesize projectsArray;
 @synthesize topicCountArray;
+//@synthesize tableView;
 
 
 
@@ -32,13 +33,14 @@
 
 - (void)viewDidLoad
 {//---initialize the arrays---
-    self.navigationItem.title = @"Projects";
-    globals *global = [globals sharedInstance];
-    self.projectsArray = [[NSMutableArray alloc] init];
-    self.topicCountArray = [[NSMutableArray alloc] init];
-    self.listData = global.projectsArray;
+    
 
     [super viewDidLoad];   
+    self.navigationItem.title = @"Projects";
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [self.tableView reloadData];
 }
 
     // Uncomment the following line to preserve selection between presentations.
@@ -50,6 +52,7 @@
 
 - (void)viewDidUnload
 {
+    [self setTableView:nil];
     [super viewDidUnload];
        self.listData = nil;
     // Release any retained subviews of the main view.
@@ -65,14 +68,13 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 1;
-}
+
+            return 1;
+    }
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     globals *global = [globals sharedInstance];
     return [global.projects count];
@@ -95,8 +97,7 @@
     NSUInteger row = [indexPath row];
     cell.textLabel.text = [[global.projects objectAtIndex:row]name];
     
-    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"bullet_black" ofType:@"png"];
-    UIImage *icon = [UIImage imageWithContentsOfFile: imagePath];
+   // UIImage *icon = [UIImage imageWithContentsOfFile: imagePath];
    // cell.imageView.image = icon;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     

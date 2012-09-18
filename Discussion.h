@@ -14,5 +14,6 @@
 @property (nonatomic, retain) NSString* excerpt;
 @property (nonatomic, retain) NSString* url;
 @property (nonatomic, retain) NSMutableArray* comments;
+@property int ID;
 
 @end

@@ -11,6 +11,8 @@
 #import "ToDoList.h"
 #import "ToDo.h"
 #import "globals.h"
+#import "AddTodoViewController.h"
+#import "AddTodoNavController.h"
 
 
 @interface ToDosViewController ()
@@ -49,6 +51,8 @@
         
     }
     self.navigationItem.title = @"To-dos";
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addTodo)];
+      self.navigationItem.rightBarButtonItem = addButton;
     
     
     // Uncomment the following line to preserve selection between presentations.
@@ -58,6 +62,34 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+
+-(void)addTodo{
+
+//    AddTodoViewController *add = [[AddTodoViewController alloc]init];
+//    [self presentModalViewController:add animated:YES];
+
+    // Present it as a modal view and wrap the controller in a navigation controller to provide a navigation bar in case you want to add edit, save, etc buttons
+    // ModalViewController is the view controller file name that gets the .h file included at the top, also make sure the XIB name is the same name
+    AddTodoViewController *addController = [[AddTodoViewController alloc] initWithNibName:@"AddTodoViewController" bundle:nil];
+    //addController.delegate = self;
+    
+    // This is where you wrap the view up nicely in a navigation controller
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addController];
+    
+    // You can even set the style of stuff before you show it
+   // navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    
+    // And now you want to present the view in a modal fashion all nice and animated
+    
+    
+    
+    
+    //navigationController.navigationItem
+    [self presentModalViewController:navigationController animated:YES];
+    
+    // make sure you release your stuff
+
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -74,14 +106,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     globals *global = [globals sharedInstance];
     return [[[[[global.projects objectAtIndex:global.selectedRow]todolists]objectAtIndex:global.selectedListIndex]todos]count];
@@ -109,7 +139,13 @@
         cell.detailTextLabel.text = @"";
     }
     else{
-        cell.detailTextLabel.text =[NSString stringWithFormat:@"Due by %@", [listData2 objectAtIndex:row]];
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+        NSDate *date = [formatter dateFromString:[listData2 objectAtIndex:row]];
+        [formatter setDateFormat:@"MM/dd/yy"];
+        NSString* dateString = [formatter stringFromDate:date];
+        cell.detailTextLabel.text =[NSString stringWithFormat:@"Due by %@", dateString];
     }
 
     

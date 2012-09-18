@@ -32,6 +32,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
+    
+  
+    
+    
     globals *global = [globals sharedInstance];
     self.listData4 =  [[NSMutableArray alloc]init];
     self.listData5 =  [[NSMutableArray alloc]init];
@@ -79,14 +85,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     globals *global = [globals sharedInstance];
 

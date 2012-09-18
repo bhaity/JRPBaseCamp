@@ -12,5 +12,6 @@
 
 @property (nonatomic, retain)NSMutableArray* listData;
 @property (nonatomic, retain)NSMutableArray* listData2;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @end

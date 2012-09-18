@@ -12,6 +12,6 @@
 
 @property (strong, nonatomic) NSMutableArray *listData;
 @property (strong, nonatomic) NSMutableArray *listData2;
-@property (strong, nonatomic) NSMutableArray *listData3;
+
 
 @end

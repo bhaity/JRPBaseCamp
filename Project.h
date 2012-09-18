@@ -21,10 +21,13 @@
     NSMutableArray* accesses;
     NSMutableArray* attachments;
     NSMutableArray* documents;
+    int ID;
     
     
     
 }
+
+@property int ID;
 @property (nonatomic,retain)NSString* name;
 @property (nonatomic,retain)NSString* accesses_url;
 @property (nonatomic,retain)NSString* attachments_url;
