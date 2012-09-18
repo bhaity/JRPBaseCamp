@@ -19,10 +19,11 @@
 
 @end
 
+
 @implementation ToDosViewController
 
-@synthesize listData;
-@synthesize listData2;
+//@synthesize listData;
+//@synthesize listData2;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -36,8 +37,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.listData = [[NSMutableArray alloc]init];
-    self.listData2 = [[NSMutableArray alloc]init];
+    //self.listData = [[NSMutableArray alloc]init];
+   // self.listData2 = [[NSMutableArray alloc]init];
     
     globals *global = [globals sharedInstance];
     Project *p = [global.projects objectAtIndex:global.selectedRow];
@@ -46,8 +47,8 @@
     for(int i =0;i<[tdl.todos count];i++){
         ToDo *t = [tdl.todos objectAtIndex:i];
         //NSString* caption = [NSString stringWithFormat:@"Due at %@", t.due_at];
-        [listData addObject:t.name];
-        [listData2 addObject:t.due_at];
+        //[listData addObject:t.name];
+        //[listData2 addObject:t.due_at];
         
     }
     self.navigationItem.title = @"To-dos";
@@ -62,7 +63,9 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-
+-(void)viewWillAppear:(BOOL)animated{
+    [self.tableView reloadData];
+}
 -(void)addTodo{
 
 //    AddTodoViewController *add = [[AddTodoViewController alloc]init];
@@ -132,9 +135,19 @@
     NSUInteger row = [indexPath row];
     cell.detailTextLabel.font = [UIFont italicSystemFontOfSize:10];
     
-    cell.textLabel.text =  [listData objectAtIndex:row];
     
-    if ([[listData2 objectAtIndex:row] isKindOfClass:[NSNull class]])
+    globals *global = [globals sharedInstance];
+    Project *p = [global.projects objectAtIndex:global.selectedRow];
+    ToDoList *tdl = [p.todolists objectAtIndex:global.selectedListIndex];
+    
+    for(int i =0;i<[tdl.todos count];i++){
+        ToDo *t = [tdl.todos objectAtIndex:i];
+    }
+    
+    
+    cell.textLabel.text =  [[tdl.todos objectAtIndex:row]name];
+    
+    if ([[[tdl.todos objectAtIndex:row]due_at] isKindOfClass:[NSNull class]])
     {
         cell.detailTextLabel.text = @"";
     }
@@ -142,7 +155,7 @@
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"yyyy-MM-dd"];
-        NSDate *date = [formatter dateFromString:[listData2 objectAtIndex:row]];
+        NSDate *date = [formatter dateFromString:[[tdl.todos objectAtIndex:row]due_at]];
         [formatter setDateFormat:@"MM/dd/yy"];
         NSString* dateString = [formatter stringFromDate:date];
         cell.detailTextLabel.text =[NSString stringWithFormat:@"Due by %@", dateString];
@@ -153,8 +166,12 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    globals *global = [globals sharedInstance];
+    Project *p = [global.projects objectAtIndex:global.selectedRow];
+    ToDoList *tdl = [p.todolists objectAtIndex:global.selectedListIndex];
+
     
-    NSString *cellText = [listData objectAtIndex:indexPath.row];
+    NSString *cellText = [[tdl.todos objectAtIndex:indexPath.row]name];
     UIFont *cellFont = [UIFont systemFontOfSize:14];
     CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
     CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];

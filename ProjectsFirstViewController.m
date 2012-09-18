@@ -163,7 +163,7 @@
     ProjectsSecondViewController *secondViewController =
     [[ProjectsSecondViewController alloc]
      initWithNibName:@"ProjectsSecondViewController" bundle:nil];
-    //secondViewController.movieSelected = [listOfMovies objectAtIndex:indexPath.row];
+    
     [self.navigationController pushViewController:secondViewController animated:YES];
    
 }

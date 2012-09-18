@@ -7,13 +7,35 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TDDatePickerController.h"
 #import "ToDo.h"
+#import "Person.h"
+#import "Project.h"
+#import "ToDoList.h"
+
 
 @interface AddTodoViewController : UITableViewController <UITextFieldDelegate>
+{
+    IBOutlet TDDatePickerController* datePickerView;
+}
 
-@property (strong, nonatomic) NSArray* fieldLabels;
-@property (strong, nonatomic) NSMutableDictionary * tempValues;
-@property (strong, nonatomic) UITextField* currentTextField;
+//@property (strong, nonatomic) NSArray* fieldLabels;
+//@property (strong, nonatomic) NSMutableDictionary * tempValues;
+@property (strong, nonatomic) UITextField* textField;
 @property (strong, nonatomic) ToDo* todo;
+
+@property(strong, nonatomic) IBOutlet UILabel* dateLabel;
+
+@property(strong, nonatomic)UIGestureRecognizer *tap;
+
+
+
+
+
+//@property(strong, nonatomic) TDDatePickerController* datePickerView;
+
+@property(strong, nonatomic) NSDate* selectedDate;
+@property(strong, nonatomic) Person* selectedPerson;
+@property(strong, nonatomic)NSString* todoTitle; 
 
 @end
