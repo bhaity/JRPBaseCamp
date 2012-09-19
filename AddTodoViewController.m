@@ -8,6 +8,7 @@
 
 #import "AddTodoViewController.h"
 #import "globals.h"
+#import "ProfileViewController.h"
 
 
 @interface AddTodoViewController ()
@@ -15,11 +16,13 @@
 @end
 
 @implementation AddTodoViewController
+
 @synthesize selectedDate;
 @synthesize selectedPerson;
 @synthesize todoTitle;
 @synthesize textField;
 @synthesize dateLabel;
+@synthesize assigneeLabel;
 @synthesize tap;
 
 //@synthesize datePickerView;
@@ -46,15 +49,14 @@
     [self.view addGestureRecognizer:tap];
     [tap setCancelsTouchesInView:NO];
 
+    assigneeTable = [[AssigneeTableController alloc]initWithNibName:@"AssigneeTableController" bundle:nil];
     
    datePickerView = [[TDDatePickerController alloc]initWithNibName:@"TDDatePickerController" bundle:nil];
-    //    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    //    [self.view addSubview:naviBarObj];
     
-    
+       
     UIBarButtonItem* cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed)];
     UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
-   // UINavigationItem *navigItem = [[UINavigationItem alloc] initWithTitle:@"Navigation Title"];
+  
     
     self.navigationItem.rightBarButtonItem = doneButton;
     self.navigationItem.leftBarButtonItem = cancelButton;
@@ -69,9 +71,24 @@
 }
 
 -(void)doneButtonPressed{
-    [self addToDo:todoTitle withDate:selectedDate andAssignee:selectedPerson];
-    [self dismissModalViewControllerAnimated:YES];
-    
+    if(todoTitle.length < 1){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"To-do failed"
+                                                        message:@"You must specify a title for the to-do!" 
+                                                       delegate:self 
+                                              cancelButtonTitle:@"OK" 
+                                              otherButtonTitles:nil, nil];
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        [alert show];
+        
+        
+    }
+    else{
+        [self addToDo:todoTitle withDate:selectedDate andAssignee:selectedPerson];
+        [self dismissModalViewControllerAnimated:YES];
+
+    }
+
+     
 }
 - (void)viewDidUnload
 {
@@ -89,14 +106,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
+
     // Return the number of sections.
     return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
+
     // Return the number of rows in the section.
     return 1;
 }
@@ -153,8 +170,19 @@
     }
     if(indexPath.section == 2){
         
-        cell.textLabel.text = @"Assignees";
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(20,10,75,25)];
+        label.textAlignment = UITextAlignmentLeft;
+        label.font = [UIFont boldSystemFontOfSize:14];
+        label.backgroundColor = [UIColor clearColor];
+        label.text = @"Assignee:";
+        [cell.contentView addSubview:label];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        
+        assigneeLabel = [[UILabel alloc]initWithFrame:CGRectMake(92,9, 200, 25)];
+        assigneeLabel.text=@""; 
+        assigneeLabel.backgroundColor = [UIColor clearColor];
+        [cell.contentView addSubview:assigneeLabel];
+        
     }
     
     
@@ -234,8 +262,13 @@
     }
     
     if(indexPath.section == 2){
-        TDSemiModalViewController *picker = [[TDSemiModalViewController alloc]init];
-        [self presentSemiModalViewController:picker];
+        
+        
+       // UIPickerView *myPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 200, 320, 200)];
+       // [picker.view addSubview:myPickerView];
+        
+        [assigneeTable setDelegate:self];
+        [self presentSemiModalViewController:assigneeTable];
     }
     
     
@@ -256,9 +289,7 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MMMM d yyyy "];
     dateLabel.text = [formatter stringFromDate:selectedDate];
-    
     [self dismissSemiModalViewController:datePickerView];
-    
     
 }
 
@@ -274,19 +305,59 @@
 -(void)datePickerCancel:(TDDatePickerController*)viewController{
     
     [self dismissSemiModalViewController:datePickerView];
+ 
+}
+
+-(void)assigneePickerSetAssignee:(AssigneeTableController*)viewController{
+    
+//    selectedDate = datePickerView.datePicker.date;
+//    NSLog(@"%@", selectedDate);
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    [formatter setDateFormat:@"MMMM d yyyy "];
+//    dateLabel.text = [formatter stringFromDate:selectedDate];
+    
+    //Person *p = [[Person alloc]init];
+    
+    globals *global = [globals sharedInstance];
+    selectedPerson = [[Person alloc]init];
+    
+    NSLog(@"%i ---checked", viewController.checkedIndexPath.row);
+    
+    selectedPerson.ID = [[[[global.projects objectAtIndex:global.selectedRow]accesses]objectAtIndex:viewController.checkedIndexPath.row]ID];
+    selectedPerson.name = [[[[global.projects objectAtIndex:global.selectedRow]accesses]objectAtIndex:viewController.checkedIndexPath.row]name];
+    
+    NSLog(@"%i", selectedPerson.ID);
+    NSLog(@"%@", selectedPerson.name);
+    
+    assigneeLabel.text = selectedPerson.name;
     
     
-    //[viewController dismissSemiModalViewController:viewController];
     
-    NSLog(@"1234567890");
+    [self dismissSemiModalViewController:assigneeTable];
+    
+}
+
+-(void)assigneePickerClearAssignee:(AssigneeTableController *)viewController{
+    
+    selectedPerson = NULL;
+    assigneeLabel.text = @"";
+    
+    [self dismissSemiModalViewController:assigneeTable];
+    
+}
+
+-(void)assigneePickerCancel:(AssigneeTableController*)viewController{
+    
+    [self dismissSemiModalViewController:assigneeTable];
     
 }
 
 -(void)addToDo:(NSString*)title withDate:(NSDate*)date andAssignee:(Person*)person{
     
     ToDo* todo = [[ToDo alloc]init];
-    todo.name = title;
     
+    todo.name = title;
+      
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
    [formatter setDateFormat:@"yyyy-MM-dd"];
     
@@ -305,18 +376,26 @@
 //        NSLog(@"%@", [[[[[global.projects objectAtIndex:global.selectedRow]todolists ]objectAtIndex:global.selectedListIndex]todos]objectAtIndex:i]);
 //    }
     
+    int projectID = [[global.projects objectAtIndex:global.selectedRow]ID];
+    int todolistID = [[[[global.projects objectAtIndex:global.selectedRow]todolists]objectAtIndex:global.selectedListIndex]ID];
+    
+    NSString * queryUrl = [NSString stringWithFormat:@"https://basecamp.com/1931784/api/v1/projects/%i/todolists/%i/todos.json", projectID,todolistID];
+    
+    NSLog(@"%@", queryUrl);
     
     
-    NSString* testURL = @"https://basecamp.com/1931784/api/v1/projects/954014/todolists/2308424/todos.json";
     
-    NSMutableURLRequest * testPostRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:testURL]];
+//    NSString* testURL = @"https://basecamp.com/1931784/api/v1/projects/954014/todolists/2308424/todos.json";
+    
+    NSMutableURLRequest * testPostRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:queryUrl]];
     [testPostRequest setHTTPMethod:@"POST"];
     [testPostRequest setValue:global.authValue forHTTPHeaderField:@"Authorization"];
     
+    NSMutableDictionary* assignee = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:selectedPerson.ID], @"id", @"Person", @"type", nil];
     
     NSMutableDictionary* testDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:todo.name,@"content",
                                      todo.due_at, @"due_at",
-                                     NULL, @"assignee",
+                                     assignee, @"assignee",
                                      nil];
     
     

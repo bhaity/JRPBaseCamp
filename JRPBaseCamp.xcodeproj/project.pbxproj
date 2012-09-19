@@ -119,6 +119,10 @@
 		72E2DFB715E538B100E0C267 /* ToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = 72E2DFB615E538B100E0C267 /* ToDo.m */; };
 		72E2DFBB15E5410900E0C267 /* ToDosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72E2DFB915E5410800E0C267 /* ToDosViewController.m */; };
 		72E2DFBC15E5410900E0C267 /* ToDosViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72E2DFBA15E5410800E0C267 /* ToDosViewController.xib */; };
+		72F03340160A0F2700BA6890 /* AssigneeTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72F0333E160A0F2700BA6890 /* AssigneeTableController.m */; };
+		72F03341160A0F2700BA6890 /* AssigneeTableController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72F0333F160A0F2700BA6890 /* AssigneeTableController.xib */; };
+		72F03345160A5FF700BA6890 /* AddTodoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72F03343160A5FF400BA6890 /* AddTodoListViewController.m */; };
+		72F03346160A5FF700BA6890 /* AddTodoListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72F03344160A5FF500BA6890 /* AddTodoListViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -300,6 +304,12 @@
 		72E2DFB815E5410800E0C267 /* ToDosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDosViewController.h; sourceTree = "<group>"; };
 		72E2DFB915E5410800E0C267 /* ToDosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDosViewController.m; sourceTree = "<group>"; };
 		72E2DFBA15E5410800E0C267 /* ToDosViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToDosViewController.xib; sourceTree = "<group>"; };
+		72F0333D160A0F2700BA6890 /* AssigneeTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssigneeTableController.h; sourceTree = "<group>"; };
+		72F0333E160A0F2700BA6890 /* AssigneeTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssigneeTableController.m; sourceTree = "<group>"; };
+		72F0333F160A0F2700BA6890 /* AssigneeTableController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssigneeTableController.xib; sourceTree = "<group>"; };
+		72F03342160A5FF200BA6890 /* AddTodoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddTodoListViewController.h; sourceTree = "<group>"; };
+		72F03343160A5FF400BA6890 /* AddTodoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddTodoListViewController.m; sourceTree = "<group>"; };
+		72F03344160A5FF500BA6890 /* AddTodoListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddTodoListViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -404,6 +414,9 @@
 				724703591603C5490086AF4D /* AddTodoViewController.h */,
 				7247035A1603C54A0086AF4D /* AddTodoViewController.m */,
 				7247035B1603C54B0086AF4D /* AddTodoViewController.xib */,
+				72F03342160A5FF200BA6890 /* AddTodoListViewController.h */,
+				72F03343160A5FF400BA6890 /* AddTodoListViewController.m */,
+				72F03344160A5FF500BA6890 /* AddTodoListViewController.xib */,
 				7212BFBE15E3CFC2003D0647 /* ProfileViewController.h */,
 				7212BFBF15E3CFC2003D0647 /* ProfileViewController.m */,
 				7212BFC015E3CFC2003D0647 /* ProfileViewController.xib */,
@@ -444,6 +457,9 @@
 		72698AED15DEEAF60003E66E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				72F0333D160A0F2700BA6890 /* AssigneeTableController.h */,
+				72F0333E160A0F2700BA6890 /* AssigneeTableController.m */,
+				72F0333F160A0F2700BA6890 /* AssigneeTableController.xib */,
 				72377479160765F90028F40D /* TDDatePickerController.h */,
 				7237747A160765F90028F40D /* TDDatePickerController.m */,
 				7237747B160765F90028F40D /* TDDatePickerController.xib */,
@@ -662,6 +678,8 @@
 				7247035D1603C54D0086AF4D /* AddTodoViewController.xib in Resources */,
 				72377482160765F90028F40D /* TDDatePickerController.xib in Resources */,
 				7237748E16077BE80028F40D /* AddingViewController.xib in Resources */,
+				72F03341160A0F2700BA6890 /* AssigneeTableController.xib in Resources */,
+				72F03346160A5FF700BA6890 /* AddTodoListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -733,6 +751,8 @@
 				72377483160765F90028F40D /* TDSemiModalViewController.m in Sources */,
 				72377484160765F90028F40D /* UIViewController+TDSemiModalExtension.m in Sources */,
 				7237748D16077BE80028F40D /* AddingViewController.m in Sources */,
+				72F03340160A0F2700BA6890 /* AssigneeTableController.m in Sources */,
+				72F03345160A5FF700BA6890 /* AddTodoListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

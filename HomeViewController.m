@@ -191,6 +191,7 @@ NSString* password;
             p.name = [[[json_people JSONValue] objectAtIndex:k]objectForKey:@"name"];
             p.email = [[[json_people JSONValue] objectAtIndex:k]objectForKey:@"email_address"];
             p.avatar_url = [[[json_people JSONValue] objectAtIndex:k]objectForKey:@"avatar_url"];
+           p.ID = [[[[json_people JSONValue] objectAtIndex:k]objectForKey:@"id"]intValue];
             [global.people addObject:p];
         }
    ///*     
@@ -216,6 +217,7 @@ NSString* password;
             tdl.todos = [[NSMutableArray alloc]init];
             tdl.name = [[[json_mytodos JSONValue]objectAtIndex:k]objectForKey:@"name"];
             tdl.remaining = [[[[json_mytodos JSONValue]objectAtIndex:k]objectForKey:@"assigned_todos"]count];
+            tdl.ID = [[[[json_mytodos JSONValue]objectAtIndex:k]objectForKey:@"id"]intValue];
             
             
             for(int j=0;j<[[[[json_mytodos JSONValue]objectAtIndex:k] objectForKey:@"assigned_todos"]count];j++){
@@ -223,6 +225,7 @@ NSString* password;
                 ToDo * td = [[ToDo alloc]init];
                 td.name = [[[[[json_mytodos JSONValue]objectAtIndex:k]objectForKey:@"assigned_todos"]objectAtIndex:j]objectForKey:@"content"];
                 td.due_at = [[[[[json_mytodos JSONValue]objectAtIndex:k]objectForKey:@"assigned_todos"]objectAtIndex:j]objectForKey:@"due_at"];
+                td.ID = [[[[[[json_mytodos JSONValue]objectAtIndex:k]objectForKey:@"assigned_todos"]objectAtIndex:j]objectForKey:@"id"]intValue];
                 
                 [tdl.todos addObject:td];
                 
@@ -255,11 +258,13 @@ NSString* password;
             p.documents = [[NSMutableArray alloc]init];
             
             p.name = [[json_projectDetails JSONValue] objectForKey:@"name"];
+             p.ID = [[[json_projectDetails JSONValue] objectForKey:@"id"]intValue];
             p.accesses_url = [[[json_projectDetails JSONValue] objectForKey:@"accesses"]objectForKey:@"url"];
             p.attachments_url = [[[json_projectDetails JSONValue] objectForKey:@"attachments"]objectForKey:@"url"];
             p.documents_url = [[[json_projectDetails JSONValue] objectForKey:@"documents"]objectForKey:@"url"];
             p.topics_url = [[[json_projectDetails JSONValue] objectForKey:@"topics"]objectForKey:@"url"];
             p.todolists_url = [[[json_projectDetails JSONValue] objectForKey:@"todolists"]objectForKey:@"url"];
+            
             
 dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
             dispatch_async(queue, ^{
@@ -272,6 +277,7 @@ dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAU
             
             for(int i=0;i<[[json_topics JSONValue] count];i++){
                
+                //NEED TO GET ID
                 Discussion* d = [[Discussion alloc]init];
                 d.comments = [[NSMutableArray alloc]init];
                 d.title = [[[json_topics JSONValue] objectAtIndex:i]objectForKey:@"title"];
@@ -285,6 +291,7 @@ dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAU
                 NSString* json_comments = [[NSString alloc] initWithData:commentsresponse encoding:NSUTF8StringEncoding]; 
                 
                    for(int i=0;i<[[[json_comments JSONValue]objectForKey:@"comments"] count];i++){
+                       //need to get id
                            Comment *c = [[Comment alloc]init];
                            c.content = [[[[json_comments JSONValue] objectForKey:@"comments"]objectAtIndex:i] objectForKey:@"content"];
                            c.creator_name = [[[[[json_comments JSONValue] objectForKey:@"comments"] objectAtIndex:i] objectForKey:@"creator"] objectForKey:@"name"];
@@ -311,6 +318,7 @@ dispatch_async(queue2, ^{
                 ToDoList* t = [[ToDoList alloc]init];
                 t.todos = [[NSMutableArray alloc]init];
                 t.name = [[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"name"];
+                t.ID = [[[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"id"]intValue];
                 t.url = [[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"url"];
                 t.remaining = [[[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"remaining_count"]intValue];
                 t.isCompleted = (BOOL)[[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"completed"];
@@ -327,6 +335,8 @@ dispatch_async(queue2, ^{
                     td.isCompleted = NO;
                     td.due_at =  [[[[[json_todos JSONValue] objectForKey:@"todos"]objectForKey:@"remaining"]objectAtIndex:i]objectForKey:@"due_at"];
                     td.name = [[[[[json_todos JSONValue] objectForKey:@"todos"]objectForKey:@"remaining"]objectAtIndex:i]objectForKey:@"content"];
+                    td.ID = [[[[[[json_todos JSONValue] objectForKey:@"todos"]objectForKey:@"remaining"]objectAtIndex:i]objectForKey:@"id"]intValue];
+
                     [t.todos addObject:td];
                 }
                 [p.todolists addObject:t];
@@ -349,6 +359,7 @@ dispatch_queue_t queue3 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFA
                 pp.name = [[[json_accesses JSONValue] objectAtIndex:i]objectForKey:@"name"];
                 pp.email = [[[json_accesses JSONValue] objectAtIndex:i]objectForKey:@"email_address"];
                 pp.avatar_url = [[[json_accesses JSONValue] objectAtIndex:i]objectForKey:@"avatar_url"];
+                pp.ID = [[[[json_accesses JSONValue] objectAtIndex:i]objectForKey:@"id"]intValue];
                 [p.accesses addObject:pp];
             }
                 
@@ -365,6 +376,8 @@ dispatch_queue_t queue4 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFA
             NSString* json_attachments = [[NSString alloc] initWithData:attachmentsresponse encoding:NSUTF8StringEncoding];
             
             for(int i=0;i<[[json_attachments JSONValue] count];i++){
+                
+                //need to add id
                 Attachment* a = [[Attachment alloc]init];
                 a.name = [[[json_attachments JSONValue] objectAtIndex:i]objectForKey:@"name"];
                 a.url = [[[json_attachments JSONValue] objectAtIndex:i]objectForKey:@"url"];
@@ -387,6 +400,7 @@ dispatch_async(queue5, ^{
             
             for(int i=0;i<[[json_documents JSONValue] count];i++){
                 
+                //need to add id
                 Document *d = [[Document alloc]init];
                 d.name = [[[json_documents JSONValue] objectAtIndex:i]objectForKey:@"title"];
                 d.url = [[[json_documents JSONValue] objectAtIndex:i]objectForKey:@"url"];
@@ -518,10 +532,16 @@ dispatch_async(queue5, ^{
     [testPostRequest setHTTPMethod:@"POST"];
     [testPostRequest setValue:global.authValue forHTTPHeaderField:@"Authorization"];
     
+    int identifier = 2193193;
+    
+    NSMutableDictionary* assignee = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:identifier], @"id", @"Person", @"type", nil];
+    
+    
+
     
     NSMutableDictionary* testDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"testing todo!",@"content",
-                                     NULL, @"due_at",
-                                     NULL, @"assignee",
+                                     @"2012-02-02", @"due_at",
+                                    assignee, @"assignee",
                                      nil];
     
     

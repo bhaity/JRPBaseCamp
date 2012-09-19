@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TDDatePickerController.h"
+#import "AssigneeTableController.h"
 #import "ToDo.h"
 #import "Person.h"
 #import "Project.h"
@@ -17,6 +18,7 @@
 @interface AddTodoViewController : UITableViewController <UITextFieldDelegate>
 {
     IBOutlet TDDatePickerController* datePickerView;
+    IBOutlet AssigneeTableController* assigneeTable;
 }
 
 //@property (strong, nonatomic) NSArray* fieldLabels;
@@ -25,6 +27,7 @@
 @property (strong, nonatomic) ToDo* todo;
 
 @property(strong, nonatomic) IBOutlet UILabel* dateLabel;
+@property(strong, nonatomic)IBOutlet UILabel* assigneeLabel;
 
 @property(strong, nonatomic)UIGestureRecognizer *tap;
 

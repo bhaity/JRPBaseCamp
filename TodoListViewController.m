@@ -11,6 +11,7 @@
 #import "globals.h"
 #import "Project.h"
 #import "ToDoList.h"
+#import "AddTodoListViewController.h"
 
 @interface TodoListViewController ()
 
@@ -33,7 +34,8 @@
 {
     [super viewDidLoad];
     
-    
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addToDoList)];
+    self.navigationItem.rightBarButtonItem = addButton;
     
   
     
@@ -67,6 +69,14 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+-(void)addToDoList{
+    
+    AddTodoListViewController *addController = [[AddTodoListViewController alloc] initWithNibName:@"AddTodoListViewController" bundle:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addController];
+        [self presentModalViewController:navigationController animated:YES];
+    
 }
 
 - (void)viewDidUnload
