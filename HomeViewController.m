@@ -318,6 +318,7 @@ dispatch_async(queue2, ^{
                 ToDoList* t = [[ToDoList alloc]init];
                 t.todos = [[NSMutableArray alloc]init];
                 t.name = [[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"name"];
+                t.description = [[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"description"];
                 t.ID = [[[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"id"]intValue];
                 t.url = [[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"url"];
                 t.remaining = [[[[json_todolists JSONValue] objectAtIndex:i]objectForKey:@"remaining_count"]intValue];

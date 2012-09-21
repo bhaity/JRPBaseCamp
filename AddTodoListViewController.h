@@ -20,4 +20,5 @@
 @property(strong, nonatomic)NSString* todoListDescription; 
 @property(strong, nonatomic)UIGestureRecognizer *tap;
 
+-(void)addTodoList:(NSString*)title withDescription:(NSString*)description;
 @end

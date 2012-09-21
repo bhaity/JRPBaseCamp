@@ -18,8 +18,8 @@
 @end
 
 @implementation TodoListViewController
-@synthesize listData4;
-@synthesize listData5;
+//@synthesize listData4;
+//@synthesize listData5;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -40,24 +40,22 @@
   
     
     
-    globals *global = [globals sharedInstance];
-    self.listData4 =  [[NSMutableArray alloc]init];
-    self.listData5 =  [[NSMutableArray alloc]init];
+    //globals *global = [globals sharedInstance];
+    
+   // self.listData4 =  [[NSMutableArray alloc]init];
+   // self.listData5 =  [[NSMutableArray alloc]init];
                        
     self.navigationItem.title = @"To-do Lists";
     
-    Project* p = [global.projects objectAtIndex:global.selectedRow];
-    
-    
-    
-    for(int i =0;i<[p.todolists count];i++){
-        ToDoList * t = [p.todolists objectAtIndex:i];
-
-        [listData4 addObject:t.name];
-        NSString* remaining = [NSString stringWithFormat:@"%i", t.remaining];
-        [listData5 addObject:remaining];
-        
-    }
+//    Project* p = [global.projects objectAtIndex:global.selectedRow];
+//    for(int i =0;i<[p.todolists count];i++){
+//        ToDoList * t = [p.todolists objectAtIndex:i];
+//
+//       // [listData4 addObject:t.name];
+//      //  NSString* remaining = [NSString stringWithFormat:@"%i", t.remaining];
+//       // [listData5 addObject:remaining];
+//        
+//    }
     
     //NSLog(@"%@", listData4);
     
@@ -77,6 +75,10 @@
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addController];
         [self presentModalViewController:navigationController animated:YES];
     
+} 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [self.tableView reloadData];
 }
 
 - (void)viewDidUnload
@@ -120,18 +122,32 @@
         
     }
     NSUInteger row = [indexPath row];
-    cell.textLabel.text = [listData4 objectAtIndex:row];
-    NSString* subtitle = [NSString stringWithFormat:@"%@ to-dos", [listData5 objectAtIndex:row]];
-    cell.detailTextLabel.text = subtitle;
+    
+    
+    globals *global = [globals sharedInstance];
+
+    Project* p = [global.projects objectAtIndex:global.selectedRow];
+    cell.textLabel.text =  [[p.todolists objectAtIndex:row]name];
+    
+    if ([[[p.todolists objectAtIndex:row]description] isKindOfClass:[NSNull class]])
+    {
+        cell.detailTextLabel.text = @"";
+    }
+    else{
+    cell.detailTextLabel.text = [[p.todolists objectAtIndex:row]description];
+    }
+    //cell.textLabel.text = [listData4 objectAtIndex:row];
+//    NSString* subtitle = [NSString stringWithFormat:@"%@ to-dos", [listData5 objectAtIndex:row]];
+//    cell.detailTextLabel.text = subtitle;
     cell.detailTextLabel.font = [UIFont italicSystemFontOfSize:10];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+     globals *global = [globals sharedInstance];
     
-    
-    NSString *cellText = [listData4 objectAtIndex:indexPath.row];
+    NSString *cellText = [[[[global.projects objectAtIndex:global.selectedRow]todolists] objectAtIndex:indexPath.row]name];
     UIFont *cellFont = [UIFont systemFontOfSize:14];
     CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
     CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];

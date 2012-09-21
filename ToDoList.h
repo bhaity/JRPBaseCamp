@@ -11,6 +11,7 @@
 @interface ToDoList : NSObject
 
 @property(nonatomic, retain) NSString* name;
+@property(nonatomic, retain) NSString* description;
 @property(nonatomic, retain) NSString* url;
 @property(nonatomic, retain) NSMutableArray* todos;
 @property BOOL isCompleted;

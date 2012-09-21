@@ -15,5 +15,6 @@
 @synthesize remaining;
 @synthesize todos;
 @synthesize ID;
+@synthesize description;
 
 @end

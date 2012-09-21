@@ -40,17 +40,17 @@
     //self.listData = [[NSMutableArray alloc]init];
    // self.listData2 = [[NSMutableArray alloc]init];
     
-    globals *global = [globals sharedInstance];
-    Project *p = [global.projects objectAtIndex:global.selectedRow];
-    ToDoList *tdl = [p.todolists objectAtIndex:global.selectedListIndex];
-    
-    for(int i =0;i<[tdl.todos count];i++){
-        ToDo *t = [tdl.todos objectAtIndex:i];
-        //NSString* caption = [NSString stringWithFormat:@"Due at %@", t.due_at];
-        //[listData addObject:t.name];
-        //[listData2 addObject:t.due_at];
-        
-    }
+//    globals *global = [globals sharedInstance];
+//    Project *p = [global.projects objectAtIndex:global.selectedRow];
+//    ToDoList *tdl = [p.todolists objectAtIndex:global.selectedListIndex];
+//    
+//    for(int i =0;i<[tdl.todos count];i++){
+//        ToDo *t = [tdl.todos objectAtIndex:i];
+//        //NSString* caption = [NSString stringWithFormat:@"Due at %@", t.due_at];
+//        //[listData addObject:t.name];
+//        //[listData2 addObject:t.due_at];
+//        
+//    }
     self.navigationItem.title = @"To-dos";
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addTodo)];
       self.navigationItem.rightBarButtonItem = addButton;
@@ -149,7 +149,9 @@
     
     if ([[[tdl.todos objectAtIndex:row]due_at] isKindOfClass:[NSNull class]])
     {
+        
         cell.detailTextLabel.text = @"";
+        
     }
     else{
         

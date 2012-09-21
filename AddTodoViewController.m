@@ -387,9 +387,9 @@
     
 //    NSString* testURL = @"https://basecamp.com/1931784/api/v1/projects/954014/todolists/2308424/todos.json";
     
-    NSMutableURLRequest * testPostRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:queryUrl]];
-    [testPostRequest setHTTPMethod:@"POST"];
-    [testPostRequest setValue:global.authValue forHTTPHeaderField:@"Authorization"];
+    NSMutableURLRequest * PostRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:queryUrl]];
+    [PostRequest setHTTPMethod:@"POST"];
+    [PostRequest setValue:global.authValue forHTTPHeaderField:@"Authorization"];
     
     NSMutableDictionary* assignee = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:selectedPerson.ID], @"id", @"Person", @"type", nil];
     
@@ -402,14 +402,14 @@
     
     NSData* httpBodyData=[NSJSONSerialization dataWithJSONObject:testDict options:0 error:nil];
     
-    [testPostRequest setHTTPBody:httpBodyData];
-    [testPostRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [PostRequest setHTTPBody:httpBodyData];
+    [PostRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     
     
     NSError *error = [[NSError alloc]init];
     NSHTTPURLResponse *urlResponse = nil;
     
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:testPostRequest returningResponse:&urlResponse error:&error];
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:PostRequest returningResponse:&urlResponse error:&error];
     
     NSString *result = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
     

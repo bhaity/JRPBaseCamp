@@ -7,6 +7,7 @@
 //
 
 #import "AddTodoListViewController.h"
+#import "NSObject+SBJSON.h"
 
 @interface AddTodoListViewController ()
 
@@ -71,7 +72,7 @@
         
     }
     else{
-        //[self addToDo:todoTitle withDate:selectedDate andAssignee:selectedPerson];
+        [self addTodoList:todoListTitle withDescription:todoListDescription];
         [self dismissModalViewControllerAnimated:YES];
         
     }
@@ -170,21 +171,106 @@
     
     [sender resignFirstResponder];
 }
+
+
 -(IBAction)textField2Done:(id)sender{
     
     todoListDescription = textField2.text;
     NSLog(@"%@", todoListDescription);
     
     [sender resignFirstResponder];
+    
 }
+
 -(void)dismissKeyboard {
     
     [textField resignFirstResponder];
     [textField2 resignFirstResponder];
     todoListTitle = textField.text;
     todoListDescription = textField2.text;
-    //NSLog(@"%@", todoTitle);
+    NSLog(@"%@", todoListTitle);
     //[self.view removeGestureRecognizer:self.tap];
+}
+
+-(void)addTodoList:(NSString*)title withDescription:(NSString*)description{
+    globals *global = [globals sharedInstance];
+    Project *p = [global.projects objectAtIndex:global.selectedRow];
+    
+    
+    int projectID = p.ID;
+    NSString * queryUrl = [NSString stringWithFormat:@"https://basecamp.com/1931784/api/v1/projects/%i/todolists.json", projectID];
+    
+    NSMutableURLRequest * PostRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:queryUrl]];
+    [PostRequest setHTTPMethod:@"POST"];
+    [PostRequest setValue:global.authValue forHTTPHeaderField:@"Authorization"];
+    
+    NSMutableDictionary* testDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:todoListTitle,@"name",
+                                     todoListDescription, @"description",
+                                     nil];
+    
+        NSData* httpBodyData=[NSJSONSerialization dataWithJSONObject:testDict options:0 error:nil];
+    
+    [PostRequest setHTTPBody:httpBodyData];
+    [PostRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    
+        
+    NSError *error = [[NSError alloc]init];
+    NSHTTPURLResponse *urlResponse = nil;
+    
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:PostRequest returningResponse:&urlResponse error:&error];
+    
+    NSString* newTodoList_URL = [[urlResponse allHeaderFields] valueForKey:@"Location"];
+    
+    NSString *result = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+    
+    NSLog(@"Response code: %d", [urlResponse statusCode]);
+    if ([urlResponse statusCode] >=200 && [urlResponse statusCode] <300)
+    {
+        NSLog(@"Response ==> %@", result);
+        
+    }
+    
+    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:newTodoList_URL]];
+    [request setValue:global.authValue forHTTPHeaderField:@"Authorization"];
+    [request setTimeoutInterval:300];
+    NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString* newTodoList_json = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+    
+   // int todolistIndex = [p.todolists count];
+    
+    int todolistID = [[[newTodoList_json JSONValue]objectForKey:@"id"]intValue];
+    
+    NSLog(@"%i", todolistID);
+    
+    
+    
+    
+    
+    //WHEN NEW TODOS ARE CREATED IN A NEWLY CREATED TODOLIST, THEY DONT SHOW UP.
+
+    
+    
+    
+    
+    ToDoList* tdl = [[ToDoList alloc]init];
+    tdl.name = todoListTitle;
+    tdl.description = todoListDescription;
+    tdl.ID = todolistID;
+    //add id here
+    
+    
+    [[[global.projects objectAtIndex:global.selectedRow]todolists]addObject:tdl];
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 /*
